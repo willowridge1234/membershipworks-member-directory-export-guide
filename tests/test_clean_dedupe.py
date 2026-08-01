@@ -41,6 +41,26 @@ class GroupingTests(unittest.TestCase):
         self.assertNotIn(2, assignment)
         self.assertEqual(assignment[0][0], assignment[1][0])
 
+    def test_shared_domain_alone_groups_different_names_and_phones(self):
+        rows = [
+            {"business_name": "Alpha Example LLC", "phone": "555-0101", "website": "https://shared.example"},
+            {"business_name": "Beta Sample LLC", "phone": "555-0102", "website": "https://shared.example"},
+        ]
+        assignment = build_groups(rows)
+        self.assertEqual(assignment[0][0], assignment[1][0])
+        self.assertIn("matching website domain", assignment[0][1])
+
+    def test_bridge_edges_form_one_transitive_group(self):
+        rows = [
+            {"business_name": "Alpha Example LLC", "phone": "555-0101", "website": "https://x.example"},
+            {"business_name": "Bridge Example LLC", "phone": "555-0102", "website": "https://x.example"},
+            {"business_name": "Bridge Example LLC", "phone": "555-0102", "website": "https://y.example"},
+            {"business_name": "Omega Example LLC", "phone": "555-0103", "website": "https://y.example"},
+        ]
+        assignment = build_groups(rows)
+        self.assertEqual(set(assignment), {0, 1, 2, 3})
+        self.assertEqual({group_id for group_id, _reason in assignment.values()}, {1})
+
     def test_no_false_group_across_unrelated_rows(self):
         rows = [
             {"business_name": "Alpha Example Inc", "phone": "555-1000", "website": "https://alphaexample.example"},

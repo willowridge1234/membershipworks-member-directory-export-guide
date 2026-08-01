@@ -73,28 +73,39 @@ def build_groups(rows):
         if name and phone:
             by_name_phone.setdefault((name, phone), []).append(i)
 
-    assignment = {}
-    next_group_id = 1
+    parent = list(range(len(rows)))
+    reasons = {}
 
-    def assign(indices, reason):
-        nonlocal next_group_id
-        existing = {assignment[i][0] for i in indices if i in assignment}
-        if existing:
-            group_id = sorted(existing)[0]
-        else:
-            group_id = next_group_id
-            next_group_id += 1
+    def find(i):
+        while parent[i] != i:
+            parent[i] = parent[parent[i]]
+            i = parent[i]
+        return i
+
+    def union(indices, reason):
+        first = indices[0]
+        for i in indices[1:]:
+            left = find(first)
+            right = find(i)
+            if left != right:
+                parent[right] = left
         for i in indices:
-            assignment[i] = (group_id, reason)
+            reasons.setdefault(i, []).append(reason)
 
     for domain, indices in by_domain.items():
         if len(indices) > 1:
-            assign(indices, f"matching website domain ({domain})")
+            union(indices, f"matching website domain ({domain})")
 
     for (name, phone), indices in by_name_phone.items():
         if len(indices) > 1:
-            assign(indices, f"matching normalized name + phone ({name!r}, {phone})")
+            union(indices, f"matching normalized name + phone ({name!r}, {phone})")
 
+    assignment = {}
+    group_ids = {}
+    for i in sorted(reasons):
+        root = find(i)
+        group_id = group_ids.setdefault(root, len(group_ids) + 1)
+        assignment[i] = (group_id, "; ".join(reasons[i]))
     return assignment
 
 
