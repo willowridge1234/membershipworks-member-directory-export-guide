@@ -1,0 +1,32 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Copyright (c) 2026 Rook Data Tools
+
+The original prose in README.md is licensed under the Creative Commons
+Attribution 4.0 International License.
+
+You are free to share and adapt that prose for any purpose, including
+commercially, provided that you give appropriate credit, provide a link to the
+license, and indicate whether changes were made. You may not apply legal terms
+or technological measures that legally restrict others from doing anything
+the license permits.
+
+License details:
+https://creativecommons.org/licenses/by/4.0/
+
+This content license applies only to the original prose in this repository. It
+does not license linked software, actors, workflows, products, brand names,
+trademarks, or third-party material. Those items retain their own terms.
+
+The script in scripts/clean_dedupe.py and the sample data in
+sample-data/example-directory-export.csv are additionally released under the
+MIT License:
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files, to deal in the software
+without restriction, including without limitation the rights to use, copy,
+modify, merge, publish, distribute, sublicense, and/or sell copies, subject to
+the above copyright notice and this permission notice being included in all
+copies.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
